@@ -35,6 +35,7 @@ func main() {
 		case 'i', 'I':
 			todoList = append(todoList, content)
 			printList(todoList)
+			saveList(todoList)
 		}
 	}
 
@@ -66,4 +67,21 @@ func printList(todoList []string) {
 		fmt.Printf("%v: %v\n", i, todoList[i])
 	}
 	println()
+}
+
+func saveList(todoList []string) {
+	file, err := os.Create("tasks.tsk")
+	if err != nil {
+		fmt.Println("Error creating file: ", err)
+	}
+
+	defer file.Close()
+
+	writer := bufio.NewWriter(file)
+
+	for _, item := range todoList {
+		fmt.Fprintln(writer, item)
+	}
+
+	writer.Flush()
 }
