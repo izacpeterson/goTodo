@@ -4,12 +4,13 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
 func main() {
 	fmt.Println("Welcome to your Todo List")
-	fmt.Printf("Commands: X + <line number>: delete, I + <todo item>: insert, Q: exit\n")
+	fmt.Printf("Commands: X + <line number>: delete, I + <todo item>: insert, L: List tasks Q: exit\n")
 	var input string
 
 	todoList := loadList()
@@ -20,7 +21,7 @@ func main() {
 
 	for {
 
-		fmt.Print("Action: ")
+		fmt.Print("Action (i/x/l/q): ")
 		scanner.Scan()
 		input = scanner.Text()
 
@@ -36,7 +37,24 @@ func main() {
 			todoList = append(todoList, content)
 			printList(todoList)
 			saveList(todoList)
+
+		case 'x', 'X':
+			index, err := strconv.Atoi(content)
+			if err != nil {
+				fmt.Println("Error converting string to int:", err)
+			}
+			if index > len(todoList) {
+				fmt.Println("Invalid selection")
+				break
+			}
+			fmt.Printf("Delete: #%v, %v\n", content, todoList[index-1])
+
+		case 'l', 'L':
+			printList(todoList)
+		default:
+			fmt.Println("Invalid Entry")
 		}
+
 	}
 
 	fmt.Println("Goodbye")
@@ -64,7 +82,7 @@ func loadList() []string {
 func printList(todoList []string) {
 	println()
 	for i := 0; i < len(todoList); i++ {
-		fmt.Printf("%v: %v\n", i, todoList[i])
+		fmt.Printf("%v: %v\n", i+1, todoList[i])
 	}
 	println()
 }
