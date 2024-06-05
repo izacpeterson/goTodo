@@ -47,7 +47,9 @@ func main() {
 				fmt.Println("Invalid selection")
 				break
 			}
-			fmt.Printf("Delete: #%v, %v\n", content, todoList[index-1])
+			todoList = append(todoList[:index-1], todoList[index:]...)
+			saveList(todoList)
+			printList(todoList)
 
 		case 'l', 'L':
 			printList(todoList)
